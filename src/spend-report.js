@@ -131,4 +131,4 @@ function buildSpendReport(rows) {
   }
 }
 
-console.log(buildSpendReport(upi))
+const report = buildSpendReport(upi)

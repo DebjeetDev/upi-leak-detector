@@ -1,0 +1,111 @@
+================================================================
+P2-UPI-LEAK-DETECTOR — MODULE 02 SPEC  (ENGLISH TWIN)
+Ticket: FIN-302     | "Subscription Leak Scanner"
+Status: 🟡 ASSIGNED → Debjeet Dhar (builds it HIMSELF, 7 Oct 2026)
+Type:   JIRA-STYLE, CODE-FREE (implementation names NOT provided)
+Why:    5B toolkit PASS → now convert the skill into a REAL project
+Pair:   Hinglish version = 02-SPEC-SUBSCRIPTION-LEAK.txt (same content)
+================================================================
+
+  🎯 ONE-LINE:
+     From a list of monthly bills, find the charges that appear
+     3 or more times — those are subscription leaks.
+     Tell the user: which one, how much, and the count.
+
+----------------------------------------------------------------
+STORY (why this matters)
+----------------------------------------------------------------
+  UPI deducts money SILENTLY. Netflix is going out, Gym is going
+  out — and the owner doesn't even know. If the same name+amount
+  keeps appearing again and again, it is almost certainly a
+  recurring subscription. Small list, big pain. That's why this
+  project is called: LEAK DETECTOR.
+
+----------------------------------------------------------------
+INPUT (test data — use as-is)
+----------------------------------------------------------------
+  Fixture correction — 8 Oct 2026: acceptance is authoritative.
+  The earlier draft accidentally listed Spotify three times; one
+  erroneous Nov Spotify row was removed. Spotify now appears twice,
+  so it remains the intentional non-leak trap.
+
+  const bills = [
+    ["Sep", "Netflix", 499],
+    ["Sep", "Spotify", 119],
+    ["Sep",     "Gym", 800],
+    ["Oct", "Netflix", 499],
+    ["Oct", "Spotify", 119],
+    ["Oct",     "Gym", 800],
+    ["Oct",   "Prime", 1499],
+    ["Nov", "Netflix", 499],
+    ["Nov",     "Gym", 800],
+    ["Nov",  "Hotstar", 899],
+  ];
+
+----------------------------------------------------------------
+REQUIREMENTS (rules without code-links)
+----------------------------------------------------------------
+  R1  Function name: findLeaks(bills) => [DONE]
+  R2  Input check: is it actually a list? No → house 400 envelope.=> [DONE]
+  R3  Garbage rows inside (missing month/name/amount, or amount
+      not a number): skip QUIETLY — never crash. => [DONE]
+  R4  ONE name + ONE amount | the pair appearing 3 or more times
+      (months may differ — do NOT join on month)
+      = LEAK.
+  R5  Anything seen only TWICE: leave it — no suspicion yet
+      (this module's line: 2 < threshold <= 3).
+      ⭐ THIS IS THE TRAP — Netflix and Gym appear 3+3 times,
+        Spotify only 2.
+  R6  Every leak is reported exactly ONCE. Order = the order
+      each pair was first seen.
+  R7  Return envelope (house style, same everywhere):
+      success → { status:200, ok:true, data:[...], leaksCount }
+      fail    → { status:400, ok:false, error:"..." }
+
+----------------------------------------------------------------
+ACCEPTANCE (expected — must match)
+----------------------------------------------------------------
+  findLeaks(bills)
+    → { status:200, ok:true,
+        data: [ ["Netflix", 499], ["Gym", 800] ],
+        leaksCount: 2 }
+    (Spotify? NO — only 119, just twice → LEAVE IT. This line
+     tests your decision-making.)
+
+  findLeaks([["Sep","X",10],["Oct","X",10]])   → 200, data: [], leaksCount: 0
+  findLeaks([])                                 → 200, data: [], leaksCount: 0
+  findLeaks("hi")                               → 400 envelope
+  findLeaks(bills) with garbage rows            → skipped, no crash
+
+----------------------------------------------------------------
+OUT OF SCOPE (future tickets, not this module)
+----------------------------------------------------------------
+  - Same-month DOUBLE charge (duplicate detection) → Module 03.
+  - Totalling the money → that was Tier-1 work.
+  - Reading a real CSV file → static list for now.
+
+----------------------------------------------------------------
+BUILD RULES (locked)
+----------------------------------------------------------------
+  1. PAPER FIRST: write the logic flow on paper — then keyboard. 📜
+  2. YOU write it. Never accept a full function from AI.
+  3. Stuck? 15 minutes self-attempt → ask for a HINT only
+     (direction, not code).
+  4. Envelope shape stays identical everywhere — like Module 01.
+  5. After running: expected vs actual MATCH-list, then send it.
+  6. Whatever approach you pick — YOUR choice. No method-suggestions
+     will come from AI (that is what "code-free ticket" means). 💪
+
+----------------------------------------------------------------
+DEFINITION OF DONE (for ticking)
+----------------------------------------------------------------
+  [ ] 5/5 acceptance outputs correct (Dubby node-verifies)
+  [ ] Can explain without looking: "how did the leak get caught?"
+  [ ] Code saved as a new file inside P2/CODE/src/ (name your call)
+  [ ] Tracker update: J1 ✅ (Dubby marks it — then J2 unlocks)
+
+  TIME-BOX: 20–30 min thinking + 15 min typing/testing. NO RUSH.
+  "Projects first, gate after." — you are soldier #1 of NIYAM #20. ⚔️
+================================================================
+END — 02-SPEC-SUBSCRIPTION-LEAK-EN.txt
+================================================================
